@@ -2,39 +2,43 @@ use eframe::{
     egui::{self, Vec2, ViewportBuilder, WindowLevel},
     NativeOptions,
 };
-use state::Projects;
+use state::{Project, ProjectPrimitive, Projects};
 
 mod state;
 mod util;
 mod view;
 
-// #[derive(Default)]
-// struct MyEguiApp {}
+pub enum Screen {
+    ProjectManager,
+    NewProject(ProjectPrimitive),
+}
 
-// impl MyEguiApp {
-//     fn new(cc: &eframe::CreationContext<'_>) -> Self {
-//         // Customize egui here with cc.egui_ctx.set_fonts and cc.egui_ctx.set_visuals.
-//         // Restore app state using cc.storage (requires the "persistence" feature).
-//         // Use the cc.gl (a glow::Context) to create graphics shaders and buffers that you can use
-//         // for e.g. egui::PaintCallback.
-//         Self::default()
-//     }
-// }
-
-struct Beamline {
-    projects: Projects,
+pub struct Beamline {
+    pub screen: Screen,
+    pub projects: Projects,
 }
 
 impl Beamline {
     fn new(cc: &eframe::CreationContext<'_>, projects: Projects) -> Self {
         //setup_style(&cc.egui_ctx);
-        Self { projects }
+        Self {
+            screen: Screen::ProjectManager,
+            projects,
+        }
+    }
+    pub fn new_project(&mut self) {
+        self.screen = Screen::NewProject(ProjectPrimitive::new_blank_for_project_creator());
     }
 }
 
 impl eframe::App for Beamline {
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
-        view::project_manager(ctx, frame, &self.projects.projects);
+        match &mut self.screen {
+            Screen::ProjectManager => view::project_manager(self, ctx, frame),
+            Screen::NewProject(project_primitive) => {
+                view::popup_new_project(ctx, project_primitive)
+            }
+        }
     }
 }
 
