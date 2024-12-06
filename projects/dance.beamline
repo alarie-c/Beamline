@@ -1,0 +1,19 @@
+[header]
+name = "dance show"
+venue = "Small Theatrical"
+height = "40"
+width = "30"
+dimensions = "ft"
+
+[title block]
+ld = "John Doe"
+title = "Light Plot"
+company = "John Theatrical"
+director = "Jack Black"
+
+[elements]
+layers = [
+    "Main layer"
+]
+fixtures = []
+

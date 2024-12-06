@@ -1,5 +1,4 @@
 [projects]
 recent = [
-    "lxplot.beamline",
-    "dance.beamline"
+    "projects/dance.beamline",
 ]
